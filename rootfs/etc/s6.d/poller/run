@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec shinken-poller -c /etc/shinken/daemons/pollerd.ini 2>&1 | sed 's/^\(.*\)$/poller : \1/g'

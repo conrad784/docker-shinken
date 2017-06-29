@@ -1,0 +1,39 @@
+#!/bin/bash
+
+if [ "${UID}" != $(id -u shinken) ]; then
+    usermod -u ${UID} shinken
+fi
+
+if [ "${GID}" != $(id -g shinken) ]; then
+    groupmod -g ${GID} shinken
+fi
+
+mkdir -p /shinken/config/{hosts,services,templates,commands,contacts,contactgroups,hostgroups,servicegroups,timeperiods} /var/run/shinken
+
+if [ ! -e /shinken/htpasswd.users ]; then
+    echo "admin:$(openssl passwd -1 password)" > /shinken/htpasswd.users
+fi
+
+if [ ! -e /shinken/.ssh/id_rsa ]; then
+    mkdir -p /shinken/.ssh
+    ssh-keygen -t rsa -b 4096 -f /shinken/.ssh/id_rsa -N ""
+fi
+
+if [ "${SHINKEN_CUSTOM_MODULES}" != "" ]; then
+    for module in ${SHINKEN_CUSTOM_MODULES}; do su - shinken -c "shinken install ${module}"; done
+fi
+
+mv /opt/graphite/conf/graphite.wsgi.example /opt/graphite/webapp/graphite/graphite_wsgi.py
+mv /opt/graphite/conf/storage-aggregation.conf.example /opt/graphite/conf/storage-aggregation.conf
+mv /opt/graphite/conf/dashboard.conf.example /opt/graphite/conf/dashboard.conf
+mv /opt/graphite/webapp/graphite/local_settings.py.example /opt/graphite/webapp/graphite/local_settings.py
+
+PYTHONPATH=/opt/graphite/webapp django-admin migrate --settings=graphite.settings --run-syncdb
+
+ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
+
+chown -R shinken:shinken /etc/s6.d /shinken /var/lib/shinken /var/run/shinken /etc/shinken /opt/graphite /var/lib/nginx /etc/nginx /var/log/nginx
+find /etc/s6.d -type f -exec chmod u+x {} \;
+chmod +x /etc/s6.d/.s6-svscan/finish /var/lib/shinken/libexec/check_localhost_*.sh
+
+exec su-exec shinken:shinken $@

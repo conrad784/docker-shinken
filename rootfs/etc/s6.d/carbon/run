@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd /opt/graphite
+exec ./bin/carbon-cache.py --nodaemon start 2>&1 | sed 's/^\(.*\)$/carbon : \1/g'

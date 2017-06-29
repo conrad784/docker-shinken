@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec nginx 2>&1 | sed 's/^\(.*\)$/nginx : \1/g'
