@@ -3,7 +3,7 @@ FROM xataz/alpine:3.6
 LABEL description="docker-compose based on alpine" \
       tags="latest 2.4.3 2.4 2" \
       maintainer="xataz <https://github.com/xataz>" \
-      build_ver="2017062901"
+      build_ver="2017071001"
 
 ENV UID=1000 \
     GID=1000 \
