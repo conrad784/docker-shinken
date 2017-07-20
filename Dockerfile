@@ -1,9 +1,9 @@
 FROM xataz/alpine:3.6
 
-LABEL description="docker-compose based on alpine" \
+LABEL description="Shinken based on alpine" \
       tags="latest 2.4.3 2.4 2" \
       maintainer="xataz <https://github.com/xataz>" \
-      build_ver="2017071001"
+      build_ver="2017072001"
 
 ENV UID=1000 \
     GID=1000 \
@@ -51,6 +51,7 @@ RUN BUILD_DEPS="build-base \
                             tzdata \
                             py-setuptools \
                             nginx \
+                            iputils \
                             ${CUSTOM_PACKAGES} \
     && adduser -h /shinken -u 1000 -g 1000 -D shinken \
     && pip install cffi \
