@@ -14,7 +14,7 @@ ARG SHINKEN_CUSTOM_MODULES=""
 ARG CUSTOM_PACKAGES=""
 ARG CUSTOM_BUILD_PACKAGES=""
 ARG CUSTOM_PYTHON_PACKAGES=""
-ARG SHINKEN_PLUGIN_VER="2.2"
+ARG MONITORING_PLUGINS_VER="2.2"
 
 RUN BUILD_DEPS="build-base \
                 python2-dev \
@@ -23,21 +23,17 @@ RUN BUILD_DEPS="build-base \
                 curl-dev \
                 libressl-dev \
                 libffi-dev \
-                libgcc \
                 g++ \
                 gcc \
                 make \
                 perl-dev \
                 ${CUSTOM_BUILD_PACKAGES}" \
     && SHINKEN_MODULES="webui2 \
-                        linux-ssh \
-                        linux-snmp \
                         auth-htpasswd \
-                        sqlitedb \
                         booster-nrpe \
                         auth-cfg-password \
-                        ui-graphite \
-                        graphite \
+                        ui-graphite2 \
+                        graphite2 \
                         simple-log" \
     && apk add --no-cache ${BUILD_DEPS} \
                             python2 \
@@ -59,6 +55,8 @@ RUN BUILD_DEPS="build-base \
                             nginx \
                             iputils \
                             perl \
+                            libgcc \
+                            mongodb \
                             ${CUSTOM_PACKAGES} \
     && adduser -h /shinken -u 1000 -g 1000 -D shinken \
     && pip install cffi \
@@ -79,14 +77,14 @@ RUN BUILD_DEPS="build-base \
                     gunicorn \
                     ${CUSTOM_PYTHON_PACKAGES} \
     && su - shinken -c 'shinken --init' \
-    && cd /tmp \
-    && wget --no-check-certificate https://www.monitoring-plugins.org/download/monitoring-plugins-${SHINKEN_PLUGIN_VER}.tar.gz \
-    && tar -xvf monitoring-plugins-${SHINKEN_PLUGIN_VER}.tar.gz \
-    && cd monitoring-plugins-${SHINKEN_PLUGIN_VER}/ \
+    && wget https://www.monitoring-plugins.org/download/monitoring-plugins-${MONITORING_PLUGINS_VER}.tar.gz -O /tmp/monitoring-plugins-${MONITORING_PLUGINS_VER}.tar.gz \
+    && tar -xvf /tmp/monitoring-plugins-${MONITORING_PLUGINS_VER}.tar.gz -C /tmp \
+    && cd /tmp/monitoring-plugins-${MONITORING_PLUGINS_VER}/ \
     && ./configure --with-nagios-user=shinken --with-nagios-group=shinken --enable-libtap --enable-extra-opts --enable-perl-modules --libexecdir=/var/lib/shinken/libexec \
     && make install \
     && for module in ${SHINKEN_MODULES} ${SHINKEN_CUSTOM_MODULES}; do su - shinken -c "shinken install ${module}"; done \
-    && apk del --no-cache ${BUILD_DEPS}
+    && apk del --no-cache ${BUILD_DEPS} \
+    && rm -rf /tmp/* /usr/bin/mongoperf
 
 COPY rootfs /
 RUN chmod u+x /usr/local/bin/startup

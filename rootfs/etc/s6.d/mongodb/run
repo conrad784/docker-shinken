@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec mongod --dbpath /shinken/mongodb/ --logpath /tmp/mongodb.log 2>&1 | sed 's/^\(.*\)$/mongodb : \1/g'

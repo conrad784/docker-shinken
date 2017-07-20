@@ -8,7 +8,7 @@ if [ "${GID}" != $(id -g shinken) ]; then
     groupmod -g ${GID} shinken
 fi
 
-mkdir -p /shinken/config/{hosts,services,templates,commands,contacts,contactgroups,hostgroups,servicegroups,timeperiods} /var/run/shinken
+mkdir -p /shinken/config/{hosts,services,templates,commands,contacts,contactgroups,hostgroups,servicegroups,timeperiods} /shinken/mongodb /var/run/shinken
 
 if [ ! -e /shinken/htpasswd.users ]; then
     echo "admin:$(openssl passwd -1 password)" > /shinken/htpasswd.users
@@ -27,6 +27,7 @@ mv /opt/graphite/conf/graphite.wsgi.example /opt/graphite/webapp/graphite/graphi
 mv /opt/graphite/conf/storage-aggregation.conf.example /opt/graphite/conf/storage-aggregation.conf
 mv /opt/graphite/conf/dashboard.conf.example /opt/graphite/conf/dashboard.conf
 mv /opt/graphite/webapp/graphite/local_settings.py.example /opt/graphite/webapp/graphite/local_settings.py
+sed -i 's/#URL_PREFIX/URL_PREFIX/g' /opt/graphite/webapp/graphite/local_settings.py 
 
 PYTHONPATH=/opt/graphite/webapp django-admin migrate --settings=graphite.settings --run-syncdb
 
