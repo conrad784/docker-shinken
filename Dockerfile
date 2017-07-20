@@ -51,6 +51,7 @@ RUN BUILD_DEPS="build-base \
                             tzdata \
                             py-setuptools \
                             nginx \
+                            iputils \
                             ${CUSTOM_PACKAGES} \
     && adduser -h /shinken -u 1000 -g 1000 -D shinken \
     && pip install cffi \
