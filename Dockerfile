@@ -96,4 +96,4 @@ RUN chmod u+x /usr/local/bin/startup
 EXPOSE 8000
 
 ENTRYPOINT ["/usr/local/bin/startup"]
-CMD ["supervisord"]
+CMD ["supervisord", "-c", "/etc/supervisord.conf"]
