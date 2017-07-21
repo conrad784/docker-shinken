@@ -61,6 +61,11 @@ $ docker run -d -v /docker/config/shinken:/shinken \
             xataz/shinken
 ```
 
+For reload configuration :
+```shell
+$ docker exec -ti ID_CONTAINER reload
+```
+
 ### Authentication
 * Default user : admin
 * Default password : password

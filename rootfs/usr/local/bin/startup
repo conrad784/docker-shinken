@@ -35,6 +35,6 @@ echo "My OS version 1.2.3" > /etc/system-release
 ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
 
 chown -R shinken:shinken /etc/supervisord.conf /shinken /var/lib/shinken /var/run/shinken /etc/shinken /opt/graphite /var/lib/nginx /etc/nginx /var/log/nginx
-chmod +x /var/lib/shinken/libexec/check_localhost_*.sh /usr/local/bin/watcher
+chmod +x /var/lib/shinken/libexec/check_localhost_*.sh /usr/local/bin/watcher /usr/local/bin/reload
 
 exec su-exec shinken:shinken /sbin/tini -- $@
