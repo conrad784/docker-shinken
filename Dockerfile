@@ -93,7 +93,7 @@ RUN BUILD_DEPS="build-base \
 COPY rootfs /
 RUN chmod u+x /usr/local/bin/startup
 
-EXPOSE 8000
+EXPOSE 8080
 
 ENTRYPOINT ["/usr/local/bin/startup"]
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]
