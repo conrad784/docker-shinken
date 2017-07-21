@@ -91,7 +91,7 @@ URL_PREFIX = '/graphite'
 # Most installs done outside of a separate tree such as /opt/graphite will
 # need to change these settings. Note that the default settings for each
 # of these is relative to GRAPHITE_ROOT.
-#CONF_DIR = '/opt/graphite/conf'
+CONF_DIR = '/opt/graphite/conf'
 STORAGE_DIR = '/shinken/graphite/storage'
 #STATIC_ROOT = '/opt/graphite/static'
 #LOG_DIR = '/opt/graphite/storage/log/webapp'
@@ -218,16 +218,16 @@ RRD_DIR = '/shinken/graphite/storage/rrd'
 # The default is 'django.db.backends.sqlite3' with file 'graphite.db'
 # located in STORAGE_DIR
 #
-#DATABASES = {
-#    'default': {
-#        'NAME': '/opt/graphite/storage/graphite.db',
-#        'ENGINE': 'django.db.backends.sqlite3',
+DATABASES = {
+    'default': {
+        'NAME': '/shinken/graphite/storage/graphite.db',
+        'ENGINE': 'django.db.backends.sqlite3'
 #        'USER': '',
 #        'PASSWORD': '',
 #        'HOST': '',
 #        'PORT': ''
-#    }
-#}
+    }
+}
 #
 
 

@@ -9,7 +9,7 @@ if [ "${GID}" != $(id -g shinken) ]; then
 fi
 
 mkdir -p /shinken/config/{hosts,services,templates,commands,contacts,contactgroups,hostgroups,servicegroups,timeperiods} \
-        /shinken/{mongodb,graphite,retention} /shinken/graphite/storage/{rrd,whisper,ceres} /shinken/logs/archives /var/run/shinken
+        /shinken/{mongodb,graphite,retention} /shinken/graphite/storage/{rrd,whisper,ceres,log/webapp} /shinken/logs/archives /var/run/shinken
 
 if [ ! -e /shinken/htpasswd.users ]; then
     echo "admin:$(openssl passwd -1 password)" > /shinken/htpasswd.users
