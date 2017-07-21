@@ -8,7 +8,8 @@ if [ "${GID}" != $(id -g shinken) ]; then
     groupmod -g ${GID} shinken
 fi
 
-mkdir -p /shinken/config/{hosts,services,templates,commands,contacts,contactgroups,hostgroups,servicegroups,timeperiods} /shinken/{mongodb,graphite,retention} /shinken/logs/archives /var/run/shinken
+mkdir -p /shinken/config/{hosts,services,templates,commands,contacts,contactgroups,hostgroups,servicegroups,timeperiods} \
+        /shinken/{mongodb,graphite,retention} /shinken/graphite/storage/{rrd,whisper,ceres} /shinken/logs/archives /var/run/shinken
 
 if [ ! -e /shinken/htpasswd.users ]; then
     echo "admin:$(openssl passwd -1 password)" > /shinken/htpasswd.users
@@ -25,8 +26,6 @@ fi
 
 mv /opt/graphite/conf/graphite.wsgi.example /opt/graphite/webapp/graphite/graphite_wsgi.py
 mv /opt/graphite/conf/dashboard.conf.example /opt/graphite/conf/dashboard.conf
-mv /opt/graphite/webapp/graphite/local_settings.py.example /opt/graphite/webapp/graphite/local_settings.py
-sed -i 's/#URL_PREFIX/URL_PREFIX/g' /opt/graphite/webapp/graphite/local_settings.py 
 sed -i 's/shinken.objects.command.CommandCall/#shinken.objects.command.CommandCall/g' /var/lib/shinken/modules/pickle-retention-file-generic/module.py
 
 PYTHONPATH=/opt/graphite/webapp django-admin migrate --settings=graphite.settings --run-syncdb
