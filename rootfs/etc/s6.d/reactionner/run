@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec shinken-reactionner -c /etc/shinken/daemons/reactionnerd.ini 2>&1 | sed 's/^\(.*\)$/reactionner : \1/g'

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+while true
+do
+    inotifywait -r -e modify,attrib,close_write,move,create,delete /shinken/config/
+    supervisorctl restart scheduler
+    supervisorctl restart broker
+    supervisorctl restart arbiter
+    sleep 2
+done

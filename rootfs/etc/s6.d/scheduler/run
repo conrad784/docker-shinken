@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec shinken-scheduler -c /etc/shinken/daemons/schedulerd.ini 2>&1 | sed 's/^\(.*\)$/scheduler : \1/g'

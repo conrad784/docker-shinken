@@ -3,7 +3,7 @@ FROM xataz/alpine:3.6
 LABEL description="Shinken based on alpine" \
       tags="latest 2.4.3 2.4 2" \
       maintainer="xataz <https://github.com/xataz>" \
-      build_ver="2017072001"
+      build_ver="2017072002"
 
 ENV UID=1000 \
     GID=1000 \
@@ -34,11 +34,12 @@ RUN BUILD_DEPS="build-base \
                         auth-cfg-password \
                         ui-graphite2 \
                         graphite2 \
-                        simple-log" \
+                        simple-log \
+                        pickle-retention-file-generic" \
     && apk add --no-cache ${BUILD_DEPS} \
                             python2 \
                             su-exec \
-                            s6 \
+                            tini \
                             curl \
                             libressl \
                             ca-certificates \
@@ -57,8 +58,10 @@ RUN BUILD_DEPS="build-base \
                             perl \
                             libgcc \
                             mongodb \
+                            inotify-tools \
+                            supervisor \
                             ${CUSTOM_PACKAGES} \
-    && adduser -h /shinken -u 1000 -g 1000 -D shinken \
+    && adduser -h /home/shinken -u 1000 -g 1000 -D shinken \
     && pip install cffi \
     && pip install pycurl \
                     shinken==${SHINKEN_VER} \
@@ -75,6 +78,7 @@ RUN BUILD_DEPS="build-base \
                     carbon \
                     scandir \
                     gunicorn \
+                    flup \
                     ${CUSTOM_PYTHON_PACKAGES} \
     && su - shinken -c 'shinken --init' \
     && wget https://www.monitoring-plugins.org/download/monitoring-plugins-${MONITORING_PLUGINS_VER}.tar.gz -O /tmp/monitoring-plugins-${MONITORING_PLUGINS_VER}.tar.gz \
@@ -92,4 +96,4 @@ RUN chmod u+x /usr/local/bin/startup
 EXPOSE 8000
 
 ENTRYPOINT ["/usr/local/bin/startup"]
-CMD ["s6-svscan","/etc/s6.d"]
+CMD ["supervisord"]

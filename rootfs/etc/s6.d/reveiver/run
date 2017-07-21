@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec shinken-receiver -c /etc/shinken/daemons/receiverd.ini 2>&1 | sed 's/^\(.*\)$/receiver : \1/g'

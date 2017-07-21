@@ -8,7 +8,7 @@ if [ "${GID}" != $(id -g shinken) ]; then
     groupmod -g ${GID} shinken
 fi
 
-mkdir -p /shinken/config/{hosts,services,templates,commands,contacts,contactgroups,hostgroups,servicegroups,timeperiods} /shinken/mongodb /var/run/shinken
+mkdir -p /shinken/config/{hosts,services,templates,commands,contacts,contactgroups,hostgroups,servicegroups,timeperiods} /shinken/{mongodb,graphite,retention} /shinken/logs/archives /var/run/shinken
 
 if [ ! -e /shinken/htpasswd.users ]; then
     echo "admin:$(openssl passwd -1 password)" > /shinken/htpasswd.users
@@ -24,17 +24,18 @@ if [ "${SHINKEN_CUSTOM_MODULES}" != "" ]; then
 fi
 
 mv /opt/graphite/conf/graphite.wsgi.example /opt/graphite/webapp/graphite/graphite_wsgi.py
-mv /opt/graphite/conf/storage-aggregation.conf.example /opt/graphite/conf/storage-aggregation.conf
 mv /opt/graphite/conf/dashboard.conf.example /opt/graphite/conf/dashboard.conf
 mv /opt/graphite/webapp/graphite/local_settings.py.example /opt/graphite/webapp/graphite/local_settings.py
 sed -i 's/#URL_PREFIX/URL_PREFIX/g' /opt/graphite/webapp/graphite/local_settings.py 
+sed -i 's/shinken.objects.command.CommandCall/#shinken.objects.command.CommandCall/g' /var/lib/shinken/modules/pickle-retention-file-generic/module.py
 
 PYTHONPATH=/opt/graphite/webapp django-admin migrate --settings=graphite.settings --run-syncdb
 
+echo "My OS version 1.2.3" > /etc/system-release
+
 ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
 
-chown -R shinken:shinken /etc/s6.d /shinken /var/lib/shinken /var/run/shinken /etc/shinken /opt/graphite /var/lib/nginx /etc/nginx /var/log/nginx
-find /etc/s6.d -type f -exec chmod u+x {} \;
-chmod +x /etc/s6.d/.s6-svscan/finish /var/lib/shinken/libexec/check_localhost_*.sh
+chown -R shinken:shinken /etc/supervisord.conf /shinken /var/lib/shinken /var/run/shinken /etc/shinken /opt/graphite /var/lib/nginx /etc/nginx /var/log/nginx
+chmod +x /var/lib/shinken/libexec/check_localhost_*.sh /usr/local/bin/watcher
 
-exec su-exec shinken:shinken $@
+exec su-exec shinken:shinken /sbin/tini -- $@
