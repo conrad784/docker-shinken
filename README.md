@@ -16,9 +16,10 @@
 * Add your own plugins
 * Graphite for beautifull graphs
 * Mongodb
+* Auto reload configuration
 
 ## Tag available
-* latest, 2.4.3, 2.4, 2 [(Dockerfile)](https://github.com/xataz/dockerfiles/blob/master/shinken/Dockerfile)
+* latest, 2.4.3, 2.4, 2 [(Dockerfile)](https://github.com/xataz/docker-shinken)
 
 ## Description
 What is [Shinken](http://www.shinken-monitoring.org/) ?
@@ -38,7 +39,7 @@ Shinken is backwards-compatible with the Nagios configuration standard and plugi
 
 ### Simply build
 ```shell
-docker build -t xataz/shinken github.com/xataz/dockerfiles.git#master:shinken
+docker build -t xataz/shinken github.com/xataz/docker-shinken
 ```
 
 ## Configuration
