@@ -1,0 +1,5 @@
+#!/bin/bash
+
+supervisorctl restart scheduler
+supervisorctl restart broker
+supervisorctl restart arbiter
