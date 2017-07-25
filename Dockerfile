@@ -3,7 +3,7 @@ FROM xataz/alpine:3.6
 LABEL description="Shinken based on alpine" \
       tags="latest 2.4.3 2.4 2" \
       maintainer="xataz <https://github.com/xataz>" \
-      build_ver="2017072101"
+      build_ver="2017072601"
 
 ENV UID=1000 \
     GID=1000 \
@@ -88,7 +88,7 @@ RUN BUILD_DEPS="build-base \
     && make install \
     && for module in ${SHINKEN_MODULES} ${SHINKEN_CUSTOM_MODULES}; do su - shinken -c "shinken install ${module}"; done \
     && apk del --no-cache ${BUILD_DEPS} \
-    && rm -rf /tmp/* /usr/bin/mongoperf
+    && rm -rf /tmp/* /usr/bin/mongoperf /etc/shinken/hosts/*
 
 COPY rootfs /
 RUN chmod u+x /usr/local/bin/startup
