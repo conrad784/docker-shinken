@@ -1,9 +1,9 @@
-FROM xataz/alpine:3.6
+FROM xataz/alpine:3.7
 
 LABEL description="Shinken based on alpine" \
       tags="latest 2.4.3 2.4 2" \
       maintainer="xataz <https://github.com/xataz>" \
-      build_ver="2017112701"
+      build_ver="2017120201"
 
 ENV UID=1000 \
     GID=1000 \
