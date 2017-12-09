@@ -14,7 +14,7 @@ ARG SHINKEN_CUSTOM_MODULES=""
 ARG CUSTOM_PACKAGES=""
 ARG CUSTOM_BUILD_PACKAGES=""
 ARG CUSTOM_PYTHON_PACKAGES=""
-ARG MONITORING_PLUGINS_VER="2.2"
+ARG MONITORING_PLUGINS_VER=2.2
 
 RUN BUILD_DEPS="build-base \
                 python2-dev \
@@ -27,6 +27,9 @@ RUN BUILD_DEPS="build-base \
                 gcc \
                 make \
                 perl-dev \
+                libdbi-dev \
+                postgresql-dev \
+                mariadb-dev \
                 ${CUSTOM_BUILD_PACKAGES}" \
     && SHINKEN_MODULES="webui2 \
                         auth-htpasswd \
@@ -60,6 +63,11 @@ RUN BUILD_DEPS="build-base \
                             mongodb \
                             inotify-tools \
                             supervisor \
+                            libdbi \
+                            libstdc++ \
+                            libpq \
+                            mariadb-client-libs \
+                            monitoring-plugins \
                             ${CUSTOM_PACKAGES} \
     && adduser -h /home/shinken -u 1000 -g 1000 -D shinken \
     && pip install cffi \
@@ -81,11 +89,6 @@ RUN BUILD_DEPS="build-base \
                     flup \
                     ${CUSTOM_PYTHON_PACKAGES} \
     && su - shinken -c 'shinken --init' \
-    && wget https://www.monitoring-plugins.org/download/monitoring-plugins-${MONITORING_PLUGINS_VER}.tar.gz -O /tmp/monitoring-plugins-${MONITORING_PLUGINS_VER}.tar.gz \
-    && tar -xvf /tmp/monitoring-plugins-${MONITORING_PLUGINS_VER}.tar.gz -C /tmp \
-    && cd /tmp/monitoring-plugins-${MONITORING_PLUGINS_VER}/ \
-    && ./configure --with-nagios-user=shinken --with-nagios-group=shinken --enable-libtap --enable-extra-opts --enable-perl-modules --libexecdir=/var/lib/shinken/libexec \
-    && make install \
     && for module in ${SHINKEN_MODULES} ${SHINKEN_CUSTOM_MODULES}; do su - shinken -c "shinken install ${module}"; done \
     && apk del --no-cache ${BUILD_DEPS} \
     && rm -rf /tmp/* /usr/bin/mongoperf /etc/shinken/hosts/*
