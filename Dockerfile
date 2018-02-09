@@ -1,15 +1,15 @@
 FROM xataz/alpine:3.7
 
 LABEL description="Shinken based on alpine" \
-      tags="latest 2.4.3 2.4 2" \
+      tags="latest   " \
       maintainer="xataz <https://github.com/xataz>" \
-      build_ver="2018020501"
+      build_ver="201802092331"
 
 ENV UID=1000 \
     GID=1000 \
     TZ=Europe/Paris
 
-ARG SHINKEN_VER=2.4.3
+ARG SHINKEN_VER=v
 ARG SHINKEN_CUSTOM_MODULES=""
 ARG CUSTOM_PACKAGES=""
 ARG CUSTOM_BUILD_PACKAGES=""
