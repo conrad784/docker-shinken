@@ -3,13 +3,13 @@ FROM xataz/alpine:3.7
 LABEL description="Shinken based on alpine" \
       tags="latest 2.4.3 2.4 2" \
       maintainer="xataz <https://github.com/xataz>" \
-      build_ver="201802092333"
+      build_ver="201802092335"
 
 ENV UID=1000 \
     GID=1000 \
     TZ=Europe/Paris
 
-ARG SHINKEN_VER=v2.4.3
+ARG SHINKEN_VER=2.4.3
 ARG SHINKEN_CUSTOM_MODULES=""
 ARG CUSTOM_PACKAGES=""
 ARG CUSTOM_BUILD_PACKAGES=""
