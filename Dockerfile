@@ -3,7 +3,7 @@ FROM xataz/alpine:3.7
 LABEL description="Shinken based on alpine" \
       tags="latest 2.4.3 2.4 2" \
       maintainer="xataz <https://github.com/xataz>" \
-      build_ver="201805290432"
+      build_ver="201806010431"
 
 ENV UID=1000 \
     GID=1000 \
